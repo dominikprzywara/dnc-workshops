@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Store.Messages.Products;
 
 namespace Store.Api
 {
@@ -34,6 +35,9 @@ namespace Store.Api
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.AddRabbitMq();
+            builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
+                   .AsImplementedInterfaces();
+            
             Container = builder.Build();
 
             return new AutofacServiceProvider(Container);
@@ -53,7 +57,9 @@ namespace Store.Api
 
             //app.UseHttpsRedirection();
             app.UseMvc();
-            app.UseRabbitMq();
+            app.UseRabbitMq()
+               .SubscribeEvent<ProductCreated>();
+            
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }
     }
