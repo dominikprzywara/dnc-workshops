@@ -17,4 +17,7 @@
     <ProjectReference Include="..\Store.Messages\Store.Messages.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Controllers\ValuesController.cs" />
+  </ItemGroup>
 </Project>
