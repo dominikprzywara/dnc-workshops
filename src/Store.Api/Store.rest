@@ -12,5 +12,4 @@ POST {{url}}/products
 Content-Type: application/json
 
 {
-    
 }

@@ -29,7 +29,7 @@ namespace Store.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(CreateProduct command)
+        public async Task<ActionResult> Post([FromBody]CreateProduct command)
         {
             await _busPublisher.PublishCommandAsync(command, CorrelationContext.Empty);
 
