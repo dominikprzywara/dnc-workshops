@@ -9,6 +9,7 @@
     <Folder Include="Handlers\" />
     <Folder Include="Domain\" />
     <Folder Include="Repositories\" />
+    <Folder Include="Dto\" />
   </ItemGroup>
 
   <ItemGroup>

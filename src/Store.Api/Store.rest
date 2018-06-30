@@ -12,6 +12,7 @@ POST {{url}}/products
 Content-Type: application/json
 
 {
-    "Name":"Banana",
-    "Price": 300
+    "Name":"Dell XPS",
+    "Price": 3,
+    "Category": "pc"
 }
