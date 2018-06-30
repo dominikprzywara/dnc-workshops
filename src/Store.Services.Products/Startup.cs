@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Dnc.Common.Mongo;
 using Dnc.Common.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Store.Messages.Products;
+using Store.Services.Products.Domain;
 
 namespace Store.Services.Products
 {
@@ -37,14 +39,17 @@ namespace Store.Services.Products
             builder.AddRabbitMq();
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly)
                    .AsImplementedInterfaces();
-            
+
+            builder.AddMongoDB();
+            builder.AddMongoDBRepository<Product>("Products");
+
             Container = builder.Build();
 
             return new AutofacServiceProvider(Container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime, IMongoDbInitializer mongoDbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -59,6 +64,8 @@ namespace Store.Services.Products
             app.UseMvc();
             app.UseRabbitMq()
                .SubscribeCommand<CreateProduct>();
+
+            mongoDbInitializer.InitializeAsync();
 
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }

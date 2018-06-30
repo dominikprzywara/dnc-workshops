@@ -1,7 +1,9 @@
 ﻿using System;
+using Dnc.Common;
+
 namespace Store.Services.Products.Domain
 {
-    public class Product
+    public class Product : IIdentifiable
     {
         public Guid Id { get; private set; }
 
